@@ -1,7 +1,9 @@
 package com.example.android.politicalpreparedness.network.models
 
+import android.os.Parcelable
 import androidx.room.*
 import com.squareup.moshi.*
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Entity(tableName = "election_table")

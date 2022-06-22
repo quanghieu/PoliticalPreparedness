@@ -1,12 +1,13 @@
 package com.example.android.politicalpreparedness.network
 
+import android.content.pm.ApplicationInfo
 import okhttp3.OkHttpClient
 
 class CivicsHttpClient: OkHttpClient() {
 
     companion object {
 
-        const val API_KEY = "API_KEY" //TODO: Place your API Key Here
+        const val API_KEY = "AIzaSyB1GaSUJjRE1Z8btGW-mEZxvxX_EUCII20" //TODO: Place your API Key Here
 
         fun getClient(): OkHttpClient {
             return Builder()

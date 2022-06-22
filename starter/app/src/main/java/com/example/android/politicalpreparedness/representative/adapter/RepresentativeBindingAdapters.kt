@@ -1,16 +1,36 @@
 package com.example.android.politicalpreparedness.representative.adapter
 
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.representative.RepresentativeViewModel
 
 @BindingAdapter("profileImage")
 fun fetchImage(view: ImageView, src: String?) {
     src?.let {
         val uri = src.toUri().buildUpon().scheme("https").build()
         //TODO: Add Glide call to load image and circle crop - user ic_profile as a placeholder and for errors.
+    }
+}
+
+@BindingAdapter("loadingStatus")
+fun loadingStatus(imgView: ImageView, status: RepresentativeViewModel.LoadingStatus?){
+    when(status) {
+        RepresentativeViewModel.LoadingStatus.LOADING -> {
+            imgView.visibility = View.VISIBLE
+            imgView.setImageResource(R.drawable.loading_animation)
+        }
+        RepresentativeViewModel.LoadingStatus.DONE -> {
+            imgView.visibility = View.GONE
+        }
+        RepresentativeViewModel.LoadingStatus.ERROR -> {
+            imgView.visibility = View.VISIBLE
+            imgView.setImageResource(R.drawable.ic_broken_image)
+        }
     }
 }
 

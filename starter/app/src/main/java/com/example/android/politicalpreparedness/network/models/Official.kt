@@ -1,5 +1,8 @@
 package com.example.android.politicalpreparedness.network.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 data class Official (
         val name: String,
         val address: List<Address>? = null,

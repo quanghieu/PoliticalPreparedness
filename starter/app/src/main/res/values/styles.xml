@@ -10,5 +10,8 @@
     </style>
 
     <!-- TODO: Add necessary styles -->
-
+    <style name="CustomMarginStyle">
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+    </style>
 </resources>

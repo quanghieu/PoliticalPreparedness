@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
-import com.example.android.politicalpreparedness.network.CivicsApi
+import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 
 class ElectionsFragment: Fragment() {
 
@@ -23,13 +25,30 @@ class ElectionsFragment: Fragment() {
         //TODO: Add binding values
         binding = FragmentElectionBinding.inflate(inflater)
         binding.lifecycleOwner = this
-        viewModel.getElections()
 
         //TODO: Link elections to voter info
 
         //TODO: Initiate recycler adapters
+        val electionList = ElectionListAdapter(ElectionListAdapter.ElectionListener{
+            findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it.id, it.division))
+        })
+        binding.electionList.adapter = electionList
+        binding.viewModel = viewModel
 
         //TODO: Populate recycler adapters
+        viewModel.electionList.observe(viewLifecycleOwner, Observer {
+            electionList.submitList(it)
+        })
+
+        viewModel.initSavedElection()
+        val savedElectionList = ElectionListAdapter(ElectionListAdapter.ElectionListener{
+            findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it.id, it.division))
+        })
+        binding.savedElectionList.adapter = savedElectionList
+        viewModel.savedElectionList.observe(viewLifecycleOwner, Observer {
+            savedElectionList.submitList(it)
+        })
+
         return binding.root
     }
 
