@@ -35,6 +35,7 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_representative.*
 import java.util.Locale
 import java.util.jar.Manifest
 
@@ -44,6 +45,7 @@ class DetailFragment : Fragment() {
         //TODO: Add Constant for Location request
         private val REQUEST_ACCESS_FINE_LOCATION = 1
         private val REQUEST_TURN_DEVICE_LOCATION_ON = 2
+        private val KEY_PROGRESS = "KEY_PROGRESS"
         val states = arrayOf(
             "Alaska",
             "Alabama",
@@ -130,6 +132,7 @@ class DetailFragment : Fragment() {
 //            loadingStatus(binding.loadingAnim, it)
 //        })
 
+
         //TODO: Populate Representative adapter
 
         //TODO: Establish button listeners for field and location search
@@ -138,6 +141,10 @@ class DetailFragment : Fragment() {
         }
 
         val motionLayout = binding.motionLayout
+        if (savedInstanceState != null) {
+            val savedProgress = savedInstanceState.getFloat(KEY_PROGRESS)
+            motionLayout.progress = savedProgress
+        }
 
         val recyclerView = binding.representativeList
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -155,6 +162,11 @@ class DetailFragment : Fragment() {
             viewModel.getRepresentatives(binding)
         }
         return binding.root
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putFloat(KEY_PROGRESS, binding.motionLayout.progress)
     }
 
     private fun onBtnLocationClick() {
