@@ -144,18 +144,34 @@ class DetailFragment : Fragment() {
         if (savedInstanceState != null) {
             val savedProgress = savedInstanceState.getFloat(KEY_PROGRESS)
             motionLayout.progress = savedProgress
+            Log.d("HIEU", "SaveInstance state restore ${savedProgress}")
         }
 
         val recyclerView = binding.representativeList
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                super.onScrollStateChanged(recyclerView, newState)
+//                val offset = recyclerView.computeVerticalScrollOffset().toFloat()
+//                val range = recyclerView.computeVerticalScrollRange().toFloat()
+//                val extent = recyclerView.computeVerticalScrollExtent().toFloat()
+//                if (range == 0f)
+//                    return
+//                motionLayout.progress = offset / (range - extent)
+//                Log.d("HIEU", "offset ${offset}, range is ${range}, extent is ${extent}")
+//                Log.d("HIEU", "progress is set ${motionLayout.progress}")
+//            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
                 val offset = recyclerView.computeVerticalScrollOffset().toFloat()
                 val range = recyclerView.computeVerticalScrollRange().toFloat()
                 val extent = recyclerView.computeVerticalScrollExtent().toFloat()
                 if (range == 0f)
                     return
-                motionLayout.progress = offset / (range - extent)
+                
+                motionLayout.progress = if ((offset / (range - extent)) == 1f) (offset / (range - extent)) - 0.00001f else (offset / (range - extent))
+                Log.d("HIEU", "offset ${offset}, range is ${range}, extent is ${extent}")
+                Log.d("HIEU", "progress is set ${motionLayout.progress}")
             }
         })
         binding.buttonSearch.setOnClickListener {
