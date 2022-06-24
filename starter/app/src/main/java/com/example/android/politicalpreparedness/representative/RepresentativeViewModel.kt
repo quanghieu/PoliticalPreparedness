@@ -60,6 +60,10 @@ class RepresentativeViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
+    fun updateCacheRepresentativeList(cacheList : List<RepresentativeLocalDB>) {
+        _listOfRepresentative.value = cacheList
+    }
+
     /**
      *  The following code will prove helpful in constructing a representative from the API. This code combines the two nodes of the RepresentativeResponse into a single official :
 

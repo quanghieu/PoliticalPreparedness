@@ -78,6 +78,7 @@ class RepresentativeViewHolder(val binding: RepresentativeItemBinding) :
             Picasso.with(context).cancelRequest(binding.representativeImage)
             Picasso.with(context).load(photoUrl)
                 .placeholder(R.drawable.ic_profile)
+                .error(R.drawable.ic_profile)
                 .into(binding.representativeImage)
         }
 

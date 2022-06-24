@@ -28,8 +28,7 @@
                 app:layoutDescription="@xml/fragment_representative_scene"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:motionDebug="SHOW_PATH">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/search_title"
@@ -177,11 +176,12 @@
                 android:id="@+id/representativeList"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:saveEnabled="true"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/motion_layout" />
-            
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
