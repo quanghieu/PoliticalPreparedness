@@ -3,33 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ConstraintSet android:id="@+id/start">
-<!--        <Constraint android:id="@id/search_title"-->
-<!--            style="@style/CustomMarginStyle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            android:text="@string/representative_search"-->
-<!--            android:textSize="20sp"-->
-<!--            android:textStyle="bold"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/address_line_1"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            android:layout_marginTop="8dp"/>-->
-
         <Constraint
-            android:id="@+id/representative_title"
+            android:id="@+id/search_title"
             style="@style/CustomMarginStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/my_representatives"
+            android:layout_marginBottom="16dp"
+            android:text="@string/representative_search"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/button_location"
+            app:layout_constraintBottom_toTopOf="@+id/address_line_1"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp"
-            />
+            app:layout_constraintTop_toTopOf="parent"/>
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -134,6 +121,5 @@
 
     <Transition
         app:constraintSetEnd="@id/end"
-        app:constraintSetStart="@+id/start">
-    </Transition>
+        app:constraintSetStart="@+id/start" />
 </MotionScene>
