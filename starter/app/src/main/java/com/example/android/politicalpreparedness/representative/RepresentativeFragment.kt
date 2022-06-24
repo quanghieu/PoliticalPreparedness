@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.constraintlayout.widget.Constraints
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -48,7 +49,7 @@ class DetailFragment : Fragment() {
         private val REQUEST_TURN_DEVICE_LOCATION_ON = 2
         private val KEY_PROGRESS = "KEY_PROGRESS"
         private val KEY_LIST = "KEY_LIST"
-        private val KEY_OFFSET = "KEY_OFFSET"
+        private val KEY_TITLE = "KEY_TITLE"
         val states = arrayOf(
             "Alaska",
             "Alabama",
@@ -111,10 +112,10 @@ class DetailFragment : Fragment() {
     //TODO: Declare ViewModel
     private lateinit var binding: FragmentRepresentativeBinding
     private val viewModel: RepresentativeViewModel by viewModels()
-    private var cacheListRepresentative : ArrayList<RepresentativeLocalDB> = ArrayList()
-    private lateinit var representativeAdapter : RepresentativeListAdapter
+    private var cacheListRepresentative: ArrayList<RepresentativeLocalDB> = ArrayList()
+    private lateinit var representativeAdapter: RepresentativeListAdapter
     private lateinit var recyclerView: RecyclerView
-    private var firstTime = false
+    private var titleHeight: Int = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -134,13 +135,15 @@ class DetailFragment : Fragment() {
         binding.viewModel = viewModel
 
         recyclerView = binding.representativeList
-        Log.d("HIEU", "Recycler view height ${recyclerView.height}")
+        Log.d("HIEU", "Recycler view height ${binding.representativeTitle.height}")
         viewModel.listOfRepresentative.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                setRecyclerViewHeight()
+            if (it.isNotEmpty()) {
+                if(binding.representativeTitle.height != 0) {
+                    setRecyclerViewHeight(binding.representativeTitle.height)
+                }
+                representativeAdapter.submitList(it)
+                cacheListRepresentative.addAll(it)
             }
-            representativeAdapter.submitList(it)
-            cacheListRepresentative.addAll(it)
         })
 
         //TODO: Populate Representative adapter
@@ -173,16 +176,14 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
-    private fun setRecyclerViewHeight() {
-        binding.representativeList.measure(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT
-        )
-        val representativeTitleHeight = binding.representativeTitle.measuredHeight
+    private fun setRecyclerViewHeight(representativeTitleHeight: Int) {
         val params = recyclerView.layoutParams
         params.height =
             Resources.getSystem().displayMetrics.heightPixels - (2 * representativeTitleHeight) - getToolBarHeight()
-        Log.d("HIEU", "Height is ${params.height}, ")
+        Log.d(
+            "HIEU",
+            "Height is ${params.height}, screen height is ${Resources.getSystem().displayMetrics.heightPixels}, title height is ${representativeTitleHeight}, toolBar height ${getToolBarHeight()}"
+        )
         recyclerView.layoutParams = params
     }
 
@@ -198,25 +199,30 @@ class DetailFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.d("HIEU", "Motion Layout state saved ${binding.motionLayout.progress}")
-        outState.putInt(KEY_OFFSET, binding.representativeList.computeVerticalScrollOffset())
         outState.putBundle(KEY_PROGRESS, binding.motionLayout.transitionState)
         outState.putParcelableArrayList(KEY_LIST, cacheListRepresentative)
+        outState.putInt(KEY_TITLE, binding.representativeTitle.height)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         if (savedInstanceState != null) {
             Log.d("HIEU", "Restore state is called")
-            val list = savedInstanceState.getParcelableArrayList<RepresentativeLocalDB>(KEY_LIST) as ArrayList
-            representativeAdapter.submitList(list)
-            viewModel.updateCacheRepresentativeList(list)
-            val progress = savedInstanceState.getBundle(KEY_PROGRESS)
+            val list =
+                savedInstanceState.getParcelableArrayList<RepresentativeLocalDB>(KEY_LIST) as ArrayList
+            val titleHeight = savedInstanceState.getInt(KEY_TITLE)
+            if (list.isNotEmpty()) {
+                representativeAdapter.submitList(list)
+                viewModel.updateCacheRepresentativeList(list)
+                val progress = savedInstanceState.getBundle(KEY_PROGRESS)
 
-            setRecyclerViewHeight()
+                setRecyclerViewHeight(titleHeight)
 
-            binding.motionLayout.transitionState = progress
+                binding.motionLayout.transitionState = progress
+            }
         }
     }
+
     private fun onBtnLocationClick() {
         if (checkLocationPermissions()) {
             checkDeviceLocationSettingsAndGetLocation()
